@@ -71,11 +71,26 @@ inline void StartSettings::setLabels(void){
     mainText->show();
 
 }
+void StartSettings::Register(void){
+    qDebug() << "Register";
+    if(username->text().size() > 4 && password->text().size() > 6 && CheckSam() ){
+        // TODO: Add files
+        emit Registered(true);
+        //delete this;
+        setVisible(false);
+        setEnabled(false);
+    }
+
+}
+
 inline void StartSettings::setConnects(void){
     connect(
      CheckSAM,
      SIGNAL(clicked(bool)),
      SLOT( CheckSam() ) );
+    connect(OK,SIGNAL(clicked(bool)),
+            SLOT( Register() ) );
+
 }
 
 inline void StartSettings::setWindowHint(void){

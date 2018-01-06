@@ -10,7 +10,6 @@ int main(int argc, char *argv[])
     MainWindow w;
     StartSettings settings;
     settings.show();
-    //w.show();
-
+    QObject::connect(&settings, SIGNAL(Registered(bool)), &w, SLOT(setActiv(void)));
     return a.exec();
 }

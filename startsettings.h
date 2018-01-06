@@ -8,6 +8,8 @@
 #include<QLineEdit>
 #include<QPushButton>
 
+#define CONFIG_PATH ./config/
+
 class StartSettings : public QWidget
 {
     Q_OBJECT
@@ -31,10 +33,11 @@ public:
     explicit StartSettings(QWidget *parent = 0);
     ~StartSettings();
 signals:
-
+ void Registered(bool);
 
 private slots:
     bool CheckSam(void);
+    void Register(void);
 };
 
 #endif // STARTSETTINGS_H
