@@ -8,7 +8,10 @@
 #include<QLineEdit>
 #include<QPushButton>
 
-#define CONFIG_PATH ./config/
+
+
+
+#define CONFIG_PATH "config"
 
 class StartSettings : public QWidget
 {

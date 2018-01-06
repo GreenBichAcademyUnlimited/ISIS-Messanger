@@ -13,7 +13,16 @@
 
 #include<QStringList> // for split reply of sam
 
+#include<QCoreApplication>
 #include<QDebug>
+#include<QDir>
+#include <QFile>
+#include<QFileInfo>
+#include<QSettings>
+
+
+
+
 
 #include"sockets.hpp"
 
@@ -79,6 +88,28 @@ void StartSettings::Register(void){
         //delete this;
         setVisible(false);
         setEnabled(false);
+
+        QFileInfo finfo(QCoreApplication::applicationFilePath());
+        std::string pathF = finfo.absoluteDir().currentPath().toStdString() + "/" + CONFIG_PATH;
+        qDebug() << pathF.c_str();
+        QDir cdir( pathF.c_str() );
+        QFile Config( (pathF+"/config.ini").c_str() );
+
+
+        if(!cdir.exists()){
+            qDebug() << pathF.c_str()  << "dir not exist";
+            cdir.mkdir(pathF.c_str());
+        }
+        if(!Config.open(QIODevice::WriteOnly | QIODevice::ReadOnly	))
+            qCritical() << "Cannot open config file" << CONFIG_PATH << "config.ini";
+        Config.close();
+
+        QSettings settings((pathF+"/config.ini").c_str(), QSettings::NativeFormat);
+        settings.setValue("SAMHost",host->text());
+        settings.setValue("SAMPort",port->text());
+        settings.setValue("Username",username->text());
+        settings.setValue("Port",username->text());
+
     }
 
 }
