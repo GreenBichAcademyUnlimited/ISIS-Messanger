@@ -22,3 +22,5 @@ HEADERS  += mainwindow.h \
     sockets.hpp
 
 FORMS    += mainwindow.ui
+
+LIBS += -lssl -lcrypto

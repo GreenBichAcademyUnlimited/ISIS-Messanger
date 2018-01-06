@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include"startsettings.h"
-#include <openssl/sha.h>
 
 #include <QApplication>
 #include<QCoreApplication>

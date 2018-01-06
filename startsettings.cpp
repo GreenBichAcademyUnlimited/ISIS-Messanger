@@ -20,6 +20,8 @@
 #include<QFileInfo>
 #include<QSettings>
 
+#include <openssl/sha.h>
+
 
 
 
@@ -105,10 +107,12 @@ void StartSettings::Register(void){
         Config.close();
 
         QSettings settings((pathF+"/config.ini").c_str(), QSettings::NativeFormat);
-        settings.setValue("SAMHost",host->text());
-        settings.setValue("SAMPort",port->text());
-        settings.setValue("Username",username->text());
-        settings.setValue("Port",username->text());
+        settings.setValue("SAM/host",host->text());
+        settings.setValue("SAM/port",port->text());
+        settings.setValue("User/Username",username->text());
+        unsigned char hash[SHA512_DIGEST_LENGTH];
+        SHA512((const unsigned char *)password->text().toStdString().c_str(),password->text().size()-1,hash);
+        settings.setValue("User/Password",QString((const char*)hash));
 
     }
 
