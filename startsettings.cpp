@@ -21,7 +21,7 @@
 #include<QFileInfo>
 #include<QSettings>
 
-#include <openssl/sha.h>
+#include <QCryptographicHash>
 
 
 
@@ -111,9 +111,8 @@ void StartSettings::Register(void){
         settings.setValue("SAM/host",host->text());
         settings.setValue("SAM/port",port->text());
         settings.setValue("User/Username",username->text());
-        unsigned char hash[SHA512_DIGEST_LENGTH];
-        SHA512((const unsigned char *)password->text().toStdString().c_str(),password->text().size()-1,hash);
-        settings.setValue("User/Password",QString((const char*)hash).toUtf8().toBase64());
+        QByteArray passBytes(password->text().toStdString().c_str());
+        settings.setValue("User/Password",QCryptographicHash::hash(passBytes, QCryptographicHash::Sha1		));
 
     }
 

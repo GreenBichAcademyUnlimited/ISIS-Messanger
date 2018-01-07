@@ -1,12 +1,10 @@
 #include "enterwidget.h"
-#include<QVBoxLayout>
-#include<QHBoxLayout>
 #include<QFileInfo>
 #include<QDir>
 #include<QCoreApplication>
 #include<QDebug>
 #include"config.h"
-#include <openssl/sha.h>
+#include <QCryptographicHash>
 
 void enterWidget :: NeedNewAccount(void){
     emit NewAccount();
@@ -14,14 +12,14 @@ void enterWidget :: NeedNewAccount(void){
 }
 
 bool enterWidget :: PassCheck(void){
-    unsigned char hash[SHA512_DIGEST_LENGTH];
-    SHA512((const unsigned char *)password->text().toStdString().c_str(),password->text().size()-1,hash);
-    QString EndedPass((const char*)hash);
-    if ( EndedPass.toUtf8().toBase64() == settings->value("User/Password").toString().toUtf8().toBase64()){
+    QByteArray passBytes(password->text().toStdString().c_str());
+    QByteArray EndedPass = QCryptographicHash::hash(passBytes, QCryptographicHash::Sha1);
+    if ( EndedPass == settings->value("User/Password") ){
         emit PassCorrect();
+        setVisible(false);
         return true;
     }
-    qDebug() << EndedPass.toUtf8().toBase64() << "!=" << settings->value("User/Password").toString().toUtf8().toBase64();
+    qDebug() << EndedPass << "!=" << settings->value("User/Password").toString();
     correctly->show();
     correctly->setText(tr("<HTML><b style='color:red'>Not correctly</b></HTML>"));
 
@@ -35,8 +33,8 @@ enterWidget::enterWidget(QWidget *parent) : QWidget(parent)
 {
     this->setFixedSize(500,300);
     this->setWindowTitle("Account check");
-    QVBoxLayout vbox(this);
-    QHBoxLayout hbox(this);
+    vbox = new QVBoxLayout (this);
+    hbox = new QHBoxLayout (this);
 
     password = new QLineEdit (this);
     password->setPlaceholderText("your password of account");
@@ -47,17 +45,17 @@ enterWidget::enterWidget(QWidget *parent) : QWidget(parent)
     correctly = new QLabel(this);
     correctly->setText(tr("<HTML><b style='color:brown'>Click and check:)</b></HTML>"));
 
-    setLayout(&vbox);
-    vbox.addWidget(password);
-    vbox.addLayout(&hbox);
-    hbox.addWidget(okbtn);
-    hbox.addWidget(correctly);
+    setLayout(vbox);
+    vbox->addWidget(password);
+    vbox->addLayout(hbox);
+    hbox->addWidget(okbtn);
+    hbox->addWidget(correctly);
 
     password->setPlaceholderText(tr("password"));
     (*password).setEchoMode(QLineEdit::Password);
     okbtn->setText("OK");
     newAcc->setText(tr("Create new account"));
-    vbox.addWidget(newAcc);
+    vbox->addWidget(newAcc);
 
     QFileInfo finfo(QCoreApplication::applicationFilePath());
     std::string pathF = finfo.absoluteDir().currentPath().toStdString() + "/" + CONFIG_PATH;
@@ -65,7 +63,6 @@ enterWidget::enterWidget(QWidget *parent) : QWidget(parent)
     connect(okbtn,SIGNAL(clicked(bool)),SLOT(PassCheck()));
     connect(newAcc,SIGNAL(clicked(bool)),SLOT(NeedNewAccount()));
 
-    setVisible(true);
 
 
 

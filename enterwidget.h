@@ -6,6 +6,9 @@
 #include<QLineEdit>
 #include<QPushButton>
 #include<QLabel>
+#include<QVBoxLayout>
+#include<QHBoxLayout>
+
 
 
 
@@ -21,6 +24,9 @@ private:
     QLineEdit * password;
     QPushButton * okbtn, *newAcc;
     QLabel * correctly;
+    QVBoxLayout * vbox;
+    QHBoxLayout * hbox;
+
 signals:
     void PassCorrect(void);
     void NewAccount(void);

@@ -28,8 +28,10 @@ int main(int argc, char *argv[])
         settings.show();
         QObject::connect(&settings, SIGNAL(Registered(bool)), &w, SLOT(setActiv(void)));
     }else{
+        enter.show();
         QObject::connect(&enter, SIGNAL(PassCorrect()), &w, SLOT(setActiv(void)));
         QObject::connect(&enter, SIGNAL(NewAccount()), &settings, SLOT(setActiv(void)));
+        QObject::connect(&settings, SIGNAL(Registered(bool)), &w, SLOT(setActiv(void)));
     }
     return a.exec();
 }
