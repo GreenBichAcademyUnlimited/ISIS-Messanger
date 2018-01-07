@@ -1,3 +1,4 @@
+
 #include <unistd.h>
 #include <string.h>
 #include <sys/types.h>
@@ -24,9 +25,10 @@
 
 namespace MyOwnTCPSocket{
 
-#define error(string)\
-    fprintf(stderr, string);\
-    return 0;
+inline int error(const char * string){
+    fprintf(stderr, string);
+    return -1;
+}
 
 int
 Connect(char*host,int portno)
@@ -45,11 +47,11 @@ Connect(char*host,int portno)
     struct hostent * server;
 
     if(sockfd == -1)
-        error("No can create socket");
+        return error("No can create socket");
 
     server = gethostbyname(host);
     if (server == NULL)
-        error("No such host");
+        return error("No such host");
 
     bzero((char *) &serv_addr, sizeof(serv_addr));
 
@@ -66,29 +68,34 @@ Connect(char*host,int portno)
     if (connect(sockfd,
                 (struct sockaddr *) &serv_addr,
                 sizeof(serv_addr)) < 0)
-        error("ERROR connecting");
+       return error("ERROR connecting");
 
     return sockfd;
 }
 
-void *
+char
 Write(int socket,char*msg)
 {
     if(send(socket,msg,strlen(msg),MSG_NOSIGNAL) == -1)
-        error("No can write to socket. ");
-    if(send(socket,"\n",1,MSG_NOSIGNAL) == -1)\
-        error("No can write to socket. ");
+        return error("cannot write to socket. ");
+    if(send(socket,"\n",1,MSG_NOSIGNAL) == -1)
+        return error("cannot write to socket. ");
+    return 1;
 }
 
 char * Read(int socket, size_t readByte=1024)
 {
     char * returnString = (char*)calloc(readByte,1);
     #ifdef WIN32
-    if((recv(socket, returnString, readByte-2, 0)) <=0 )
-        error("No can read from socket");
+    if((recv(socket, returnString, readByte-2, 0)) <=0 ){
+       error("No can read from socket");
+       return 0;
+    }
     #else
-    if(read(socket,returnString,readByte-2) == -1)
+    if(read(socket,returnString,readByte-2) == -1){
         error("No can read from socket");
+        return 0;
+    }
     #endif
     return returnString;
 }

@@ -194,10 +194,10 @@ bool StartSettings::CheckSam(void){
     if(fds == -1)
         return false;
 
-    MyOwnTCPSocket::Write(fds,(char*)"HELLO VERSION");
+    if( MyOwnTCPSocket::Write(fds,(char*)"HELLO VERSION") == -1) return false ;
 
     char * data = MyOwnTCPSocket::Read(fds,40);
-
+    if (data == 0) return false;
     QStringList listdata
         = QString(data).split(" ");
 
