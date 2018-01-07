@@ -24,10 +24,9 @@
 
 namespace MyOwnTCPSocket{
 
-inline int error(const char * string){
-    fprintf(stderr, string);
+#define error(string)\
+    fprintf(stderr, string);\
     return 0;
-}
 
 int
 Connect(char*host,int portno)
@@ -72,7 +71,7 @@ Connect(char*host,int portno)
     return sockfd;
 }
 
-void
+void *
 Write(int socket,char*msg)
 {
     if(send(socket,msg,strlen(msg),MSG_NOSIGNAL) == -1)
