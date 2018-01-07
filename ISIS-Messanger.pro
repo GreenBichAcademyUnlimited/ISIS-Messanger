@@ -15,11 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     startsettings.cpp \
-    sockets.cpp
+    sockets.cpp \
+    enterwidget.cpp
 
 HEADERS  += mainwindow.h \
     startsettings.h \
-    sockets.hpp
+    sockets.hpp \
+    enterwidget.h \
+    config.h
 
 FORMS    += mainwindow.ui
 

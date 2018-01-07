@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include"startsettings.h"
+#include"enterwidget.h"
+#include"config.h"
 
 #include <QApplication>
 #include<QCoreApplication>
@@ -15,6 +17,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     MainWindow w;
     StartSettings settings;
+    enterWidget enter;
 
     QFileInfo finfo(QCoreApplication::applicationFilePath());
     std::string pathF = finfo.absoluteDir().currentPath().toStdString()  + "/"  + CONFIG_PATH + "/config.ini";
@@ -25,7 +28,8 @@ int main(int argc, char *argv[])
         settings.show();
         QObject::connect(&settings, SIGNAL(Registered(bool)), &w, SLOT(setActiv(void)));
     }else{
-        w.show();
+        QObject::connect(&enter, SIGNAL(PassCorrect()), &w, SLOT(setActiv(void)));
+        QObject::connect(&enter, SIGNAL(NewAccount()), &settings, SLOT(setActiv(void)));
     }
     return a.exec();
 }

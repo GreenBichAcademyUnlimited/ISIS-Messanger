@@ -1,4 +1,5 @@
 #include "startsettings.h"
+#include"config.h"
 
 #include <limits.h> // HOST_NAME_MAX
 
@@ -112,7 +113,7 @@ void StartSettings::Register(void){
         settings.setValue("User/Username",username->text());
         unsigned char hash[SHA512_DIGEST_LENGTH];
         SHA512((const unsigned char *)password->text().toStdString().c_str(),password->text().size()-1,hash);
-        settings.setValue("User/Password",QString((const char*)hash));
+        settings.setValue("User/Password",QString((const char*)hash).toUtf8().toBase64());
 
     }
 

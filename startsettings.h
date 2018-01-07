@@ -11,7 +11,6 @@
 
 
 
-#define CONFIG_PATH "config"
 
 class StartSettings : public QWidget
 {
@@ -41,6 +40,9 @@ signals:
 private slots:
     bool CheckSam(void);
     void Register(void);
+    void setActiv(void){
+        show();
+    }
 };
 
 #endif // STARTSETTINGS_H
