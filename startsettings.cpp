@@ -112,6 +112,7 @@ void StartSettings::Register(void){
         settings.setValue("SAM/port",port->text());
         settings.setValue("User/Username",username->text());
         QByteArray passBytes(password->text().toStdString().c_str());
+        passBytes.append(username->text().toStdString().c_str()); // salt
         settings.setValue("User/Password",QCryptographicHash::hash(passBytes, QCryptographicHash::Sha1		));
 
     }

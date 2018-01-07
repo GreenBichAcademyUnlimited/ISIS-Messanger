@@ -13,6 +13,8 @@ void enterWidget :: NeedNewAccount(void){
 
 bool enterWidget :: PassCheck(void){
     QByteArray passBytes(password->text().toStdString().c_str());
+    passBytes.append(settings->value("User/Username").toString()); //salt
+
     QByteArray EndedPass = QCryptographicHash::hash(passBytes, QCryptographicHash::Sha1);
     if ( EndedPass == settings->value("User/Password") ){
         emit PassCorrect();
