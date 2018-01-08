@@ -1,6 +1,9 @@
 #ifndef SAM_H
 #define SAM_H
 
+typedef enum{
+    stream, datagram, raw
+}SAMstyle;
 
 class sam
 {
@@ -8,13 +11,15 @@ class sam
 private:
     void connect(const char * host, int port);
 
+
 protected:
     int m_sock, m_port;
     bool error;
     char * m_host, * pubkey, * privkey;
 
-
-
+public: // sesions
+    void DeleteSession(const char * nickname);
+    void CreateSession(const char * nickname="Isis messa(e)nger", SAMstyle s = stream );
 
 public: // keys
     void loadKeys(const char * pubkey, const char * privkey);
