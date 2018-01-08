@@ -16,13 +16,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     startsettings.cpp \
     sockets.cpp \
-    enterwidget.cpp
+    enterwidget.cpp \
+    sam.cpp
 
 HEADERS  += mainwindow.h \
     startsettings.h \
     sockets.hpp \
     enterwidget.h \
-    config.h
+    config.h \
+    sam.h
 
 FORMS    += mainwindow.ui
 

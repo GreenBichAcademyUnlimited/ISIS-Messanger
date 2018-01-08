@@ -1,5 +1,6 @@
 #include "startsettings.h"
 #include"config.h"
+#include"sam.h"
 
 #include <limits.h> // HOST_NAME_MAX
 
@@ -182,42 +183,14 @@ inline void StartSettings::setLineEdits(void){
 }
 
 bool StartSettings::CheckSam(void){
-
-
-    qDebug() << host->text();
-    qDebug() << port->text();
-
-    int fds = MyOwnTCPSocket::Connect(
-     (char*)host->text().toStdString().c_str(),
-     atoi( port->text().toStdString().c_str() )
-                );
-    if(fds == -1)
-        return false;
-
-    if( MyOwnTCPSocket::Write(fds,(char*)"HELLO VERSION") == -1) return false ;
-
-    char * data = MyOwnTCPSocket::Read(fds,40);
-    if (data == 0) return false;
-    QStringList listdata
-        = QString(data).split(" ");
-
-    MyOwnTCPSocket::stopClient(&fds);
-
-    qDebug() << data;
-    free((void*)data);
-
+    sam Client((char*)host->text().toStdString().c_str(), atoi( port->text().toStdString().c_str()));
     SAMWork->show();
-    qDebug() << listdata[2];
-    if(
-            listdata.size() > 3
-            &&
-            listdata[2] == "RESULT=OK"
-            ) {
+    if( !Client.getError() )
+    {
            SAMWork->setStyleSheet(samWorkStyleOK);
            SAMWork->setText(samWork);
            return true;
     }
-
     SAMWork->setStyleSheet(samWorkStyleBad);
     SAMWork->setText(samNoWork);
     return false;

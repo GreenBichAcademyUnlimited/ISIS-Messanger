@@ -1,3 +1,4 @@
+#include<stdlib.h>
 namespace MyOwnTCPSocket{
 
     int Connect(char*host,int portno);
