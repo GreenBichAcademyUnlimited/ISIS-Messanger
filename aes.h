@@ -9,7 +9,7 @@ class AES
 {
 protected:
     EVP_CIPHER_CTX encrypter, decrypter;
-    bool aes_init(unsigned char *key, unsigned char *salt, int nrounds=5);
+    bool aes_init(unsigned char *key, unsigned char *salt, int nrounds=1);
 public:
     AES(const char * key, const char * salt);
     unsigned char * decrypt(const char * msg);
