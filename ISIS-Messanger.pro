@@ -26,6 +26,6 @@ HEADERS  += mainwindow.h \
     config.h \
     sam.h
 
-FORMS    += mainwindow.ui
+FORMS    +=
 
 #LIBS += 

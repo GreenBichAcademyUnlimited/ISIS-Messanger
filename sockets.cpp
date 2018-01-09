@@ -73,12 +73,8 @@ Connect(char*host,int portno)
     return sockfd;
 }
 
-char Write(int socket, char const * msg){
-    return MyOwnTCPSocket::Write(socket, (char*)msg);
-}
-
 char
-Write(int socket,char*msg)
+Write(int socket,char const * msg)
 {
     if(send(socket,msg,strlen(msg),MSG_NOSIGNAL) == -1)
         return error("cannot write to socket. ");
