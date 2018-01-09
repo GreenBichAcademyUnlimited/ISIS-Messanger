@@ -45,7 +45,7 @@ public: // errors/is sam
     bool getError(void);
 
     int& operator[] (int x){
-        if(c_incoming < x && incoming)
+        if(c_incoming > x && incoming)
             return incoming[x];
     }
 
