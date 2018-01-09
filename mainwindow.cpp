@@ -95,7 +95,6 @@ void MainWindow::setActiv(){
              QMessageBox error;
              error.setText(tr("Error with SAM, try new"));
              error.exec();
-
          }
     }
 }

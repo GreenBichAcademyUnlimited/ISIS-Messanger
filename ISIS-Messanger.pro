@@ -17,15 +17,21 @@ SOURCES += main.cpp\
     startsettings.cpp \
     sockets.cpp \
     enterwidget.cpp \
-    sam.cpp
+    sam.cpp \
+    friendsdb.cpp \
+    messagesdb.cpp \
+    aes.cpp
 
 HEADERS  += mainwindow.h \
     startsettings.h \
     sockets.hpp \
     enterwidget.h \
     config.h \
-    sam.h
+    sam.h \
+    friendsdb.h \
+    messagesdb.h \
+    aes.h
 
 FORMS    +=
 
-#LIBS += 
+LIBS += -lcrypto -lssl
