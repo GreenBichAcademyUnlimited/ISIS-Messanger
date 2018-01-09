@@ -2,25 +2,29 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include<QMenuBar>
 
-namespace Ui {
-class MainWindow;
-}
+
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+private:
+    QMenu * Advance;
+    QAction * Exit;
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+
 public slots:
     void setActiv(void){
         this->show();
     }
 
 private:
-    Ui::MainWindow *ui;
 };
 
 #endif // MAINWINDOW_H
