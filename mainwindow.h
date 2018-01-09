@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include<QMenuBar>
+#include<QSettings>
+
 
 
 
@@ -10,9 +12,18 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+
 private:
-    QMenu * Advance;
-    QAction * Exit;
+    void initMenu(void);
+private:
+
+    QMenu * Friends, * Settings, * Advance;
+
+    QAction * Friends_add,
+    * Settings_Network,
+    * Advance_Exit, * Advance_About;
+
+    QSettings * config;
 
 public:
     explicit MainWindow(QWidget *parent = 0);
@@ -20,9 +31,7 @@ public:
 
 
 public slots:
-    void setActiv(void){
-        this->show();
-    }
+    void setActiv(void);
 
 private:
 };

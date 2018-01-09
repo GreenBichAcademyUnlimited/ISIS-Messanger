@@ -21,6 +21,7 @@
     #define bcopy(b1,b2,len) (memmove((b2), (b1), (len)), (void) 0)
 #endif
 
+#include<QDebug>
 
 
 namespace MyOwnTCPSocket{
@@ -74,8 +75,9 @@ Connect(char*host,int portno)
 }
 
 char
-Write(int socket,char const * msg)
+Write(int socket, const char * msg)
 {
+    qDebug() << "Socket write " << socket << " msg: " << msg;
     if(send(socket,msg,strlen(msg),MSG_NOSIGNAL) == -1)
         return error("cannot write to socket. ");
     if(send(socket,"\n",1,MSG_NOSIGNAL) == -1)
@@ -97,6 +99,7 @@ char * Read(int socket, size_t readByte=1024)
         return 0;
     }
     #endif
+    qDebug() << "Read " << readByte << " msg: " << returnString;
     return returnString;
 }
 

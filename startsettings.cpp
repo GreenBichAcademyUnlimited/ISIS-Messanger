@@ -88,7 +88,6 @@ void StartSettings::Register(void){
     qDebug() << "Register";
     if(username->text().size() > 4 && password->text().size() > 6 && CheckSam() ){
         // TODO: Add files
-        emit Registered(true);
         //delete this;
         setVisible(false);
         setEnabled(false);
@@ -104,7 +103,7 @@ void StartSettings::Register(void){
             qDebug() << pathF.c_str()  << "dir not exist";
             cdir.mkdir(pathF.c_str());
         }
-        if(!Config.open(QIODevice::WriteOnly | QIODevice::ReadOnly	))
+        if(!Config.open(QIODevice::WriteOnly	))
             qCritical() << "Cannot open config file" << CONFIG_PATH << "config.ini";
         Config.close();
 
@@ -115,6 +114,7 @@ void StartSettings::Register(void){
         QByteArray passBytes(password->text().toStdString().c_str());
         passBytes.append(username->text().toStdString().c_str()); // salt
         settings.setValue("User/Password",QCryptographicHash::hash(passBytes, QCryptographicHash::Sha1		));
+        emit Registered(true);
 
     }
 

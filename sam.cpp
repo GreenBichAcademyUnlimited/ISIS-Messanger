@@ -4,6 +4,7 @@
 #include<QString>
 #include<QStringList>
 #include<QDebug>
+#include<QDebug>
 
 //errors / is sam
 
@@ -28,6 +29,7 @@ sam::isSam(int sock,bool closeConnect){
     QStringList listdata = QString(data).split(" ");
     if(closeConnect)
         MyOwnTCPSocket::stopClient(&sock);
+    qDebug() << "Is sam " << sock << data;
     delete [] data;
     if(listdata.size() > 3 && listdata[2] == "RESULT=OK")
            return true;
@@ -36,10 +38,12 @@ sam::isSam(int sock,bool closeConnect){
 
 //connect
 void sam::connect(const char *host, int port){
+    qDebug() << "Sam :: Connect" << host << port;
     this->m_sock = MyOwnTCPSocket::Connect( (char*)host, port );
     m_host = new char[strlen(host)];
     strcpy((char*)m_host,(char*)host);
     this->m_port=port;
+    isSam(this->m_sock,false);
 }
 
 
@@ -61,10 +65,12 @@ void sam::loadKeys(const char * pubkey, const char * privkey){
 void sam::generateDestination(void){
     if(!this->m_sock) this->connect(this->m_host,this->m_port);
     if(!this->error){
-        MyOwnTCPSocket::Write(this->m_sock,(char*)"DEST GENERATE");
-        QString Data = MyOwnTCPSocket::Read(this->m_sock);
+        MyOwnTCPSocket::Write(this->m_sock,"DEST GENERATE");
+        QString Data = QString(MyOwnTCPSocket::Read(this->m_sock));
+        qDebug() << Data;
         QStringList SplitedData = Data.split(" ");
         if(SplitedData.size() < 4){
+            qDebug() << SplitedData;
             this->error=true;
         }
         else{
