@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     sam.cpp \
     friendsdb.cpp \
     messagesdb.cpp \
-    aes.cpp
+    aes.cpp \
+    dbabstract.cpp
 
 HEADERS  += mainwindow.h \
     startsettings.h \
@@ -30,7 +31,8 @@ HEADERS  += mainwindow.h \
     sam.h \
     friendsdb.h \
     messagesdb.h \
-    aes.h
+    aes.h \
+    dbabstract.h
 
 FORMS    +=
 

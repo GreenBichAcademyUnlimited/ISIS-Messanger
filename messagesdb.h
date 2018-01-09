@@ -1,8 +1,8 @@
 #ifndef MESSAGESDB_H
 #define MESSAGESDB_H
+#include"dbabstract.h"
 
-
-class messagesDB
+class messagesDB : public dbAbstract
 {
 public:
     messagesDB();
