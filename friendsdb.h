@@ -2,12 +2,22 @@
 #define FRIENDSDB_H
 #include"dbabstract.h"
 
-class friendsDB : public dbAbstract
+class dbfriends : public dbAbstract
 {
 private:
+    DB_ABSTRACT_HPP;
+    void query(void){};
+
 public:
-    bool error;
-    friendsDB();
+    QMap<QString, QVariant> getFriend(const char * nickname){
+        this->q.prepare("Select * from friends where nick=:nick");
+        this->q.bindValue(":nick", nickname);
+        this->q.exec();
+        return this->q.boundValues();
+    }
+
+    void install(void);
+    dbfriends();
 
 };
 

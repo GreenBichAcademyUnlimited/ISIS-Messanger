@@ -13,6 +13,8 @@
 
 #include"aes.h"
 
+char * PassOfGuy;
+char * UsernameOfGuy;
 
 int main(int argc, char *argv[])
 {

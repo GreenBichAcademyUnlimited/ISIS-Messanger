@@ -1,6 +1,6 @@
 #include "dbabstract.h"
 
-void dbAbstract::getDB(const char * driver, const char * dbname){
+void dbAbstract::getDB(const char * dbname, const char * driver){
     this->db = QSqlDatabase::addDatabase(driver);
     db.setHostName("localhost");
     db.setDatabaseName(dbname);
@@ -13,6 +13,8 @@ void dbAbstract::getDB(const char * driver, const char * dbname){
        qDebug() << "database was open";
    }
 }
+
+
 
 dbAbstract::~dbAbstract(){
    // if(this->q) delete [] q;

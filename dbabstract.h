@@ -4,20 +4,46 @@
 #include<QDebug>
 
 
+#define DB_ABSTRACT_HPP\
+    template < class Arg, class ... Args> void query(Arg arg, Args ... args);\
+    template <class ... Args>  void query( Args ... args );
+
+
+
+#define DB_ABSTRACT_CPP(classname)\
+    \
+template < class Arg, class ... Args> void db##classname ::query(Arg arg, Args ... args){\
+    q.exec(arg);\
+    qDebug() << "query::" << arg;\
+    qDebug() << q.lastError().text();\
+    this->query(args...);\
+}\
+template < class ... Args> void db##classname ::query(Args ... args ){\
+    this->query(args...);\
+}
+
+
+
+/*
+ * but what for?xD
+ * */
+
 class dbAbstract
 {
 protected:
     bool error=false;
     QSqlDatabase db;
-    QSqlQuery q;
     bool getError(void){
         return this->error;
     }
 
-    void getDB(const char * driver="QSQLITE", const char * dbname="local.sqlite");
-    void virtual query( void ) = 0;
+    void getDB(const char * dbname="local.sqlite", const char * driver="QSQLITE");
 
+    void virtual query( void ) = 0;
+    void virtual install(void)=0;
 public:
+
+    QSqlQuery q;
     ~dbAbstract();
 };
 

@@ -15,6 +15,7 @@ protected:
     bool aes_init(const char * key, const char * salt, int nrounds=1);
 public:
     AES(const char * key, const char * salt);
+
     unsigned char * decrypt(const char * msg);
     unsigned char * encrypt(const char * msg);
     bool error;

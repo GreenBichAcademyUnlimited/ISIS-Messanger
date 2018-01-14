@@ -17,6 +17,10 @@ bool enterWidget :: PassCheck(void){
 
     QByteArray EndedPass = QCryptographicHash::hash(passBytes, QCryptographicHash::Sha1);
     if ( EndedPass == settings->value("User/Password") ){
+        PassOfGuy = (char*)calloc(password->text().toStdString().size()+1,1);
+        UsernameOfGuy = (char*)calloc(settings->value("User/Username").toString().toStdString().size()+1,1);
+        strcpy(PassOfGuy, settings->value("User/Username").toString().toStdString().c_str() );
+
         emit PassCorrect();
         setVisible(false);
         return true;

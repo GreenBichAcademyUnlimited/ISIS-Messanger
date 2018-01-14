@@ -2,10 +2,17 @@
 #define MESSAGESDB_H
 #include"dbabstract.h"
 
-class messagesDB : public dbAbstract
+class dbmessage : public dbAbstract
 {
+private:
+    void query(void){};
+    DB_ABSTRACT_HPP;
+    void install(void);
+
 public:
-    messagesDB();
+    dbmessage();
+    void addMessage(const char * message, int to, int from=0); // zero = self
+
 };
 
 #endif // MESSAGESDB_H

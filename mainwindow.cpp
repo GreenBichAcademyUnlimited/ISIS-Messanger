@@ -7,6 +7,7 @@
 #include<QMessageBox>
 #include<QFileInfo>
 #include<QDir>
+//#include<QDebug>
 
 void MainWindow::initMenu(void){
     Friends = new QMenu(this);
@@ -97,6 +98,8 @@ void MainWindow::setActiv(){
              error.exec();
          }
     }
+    //qDebug() << "PASS OF GUY=" << PassOfGuy;
+
 }
 
 MainWindow::MainWindow(QWidget *parent) :
