@@ -8,6 +8,7 @@ private:
 public:
     bool error;
     friendsDB();
+
 };
 
 #endif // FRIENDSDB_H

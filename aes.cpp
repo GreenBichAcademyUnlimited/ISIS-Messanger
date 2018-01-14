@@ -1,5 +1,9 @@
 #include "aes.h"
 
+bool AES::aes_init(const char * key, const char * salt, int nrounds){
+    return this->aes_init((unsigned char*)key,(unsigned char*)salt,nrounds);
+}
+
 bool AES::aes_init(unsigned char *key, unsigned char *salt, int nrounds){
     unsigned char keytmp[32], iv[32]; // 32*8 = 256 bits
     if(    EVP_BytesToKey(EVP_aes_256_cbc(), EVP_sha1(), salt, key, strlen((const char*)key), nrounds, keytmp, iv) != 32 )
@@ -38,4 +42,12 @@ AES::AES(const char * key, const char * salt)
     EVP_add_cipher(EVP_aes_256_cbc());
     this->error = !this->aes_init((unsigned char*)key, (unsigned char*)salt);
 }
+
+
+
+
+
+
+
+
 

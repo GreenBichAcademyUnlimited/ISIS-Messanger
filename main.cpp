@@ -11,6 +11,8 @@
 #include<QFile>
 #include<QFileInfo>
 
+#include"aes.h"
+
 
 int main(int argc, char *argv[])
 {
