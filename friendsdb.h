@@ -10,10 +10,17 @@ private:
 
 public:
     QMap<QString, QVariant> getFriend(const char * nickname){
-        this->q.prepare("Select * from friends where nick=:nick");
+        this->q.prepare("Select * from Friends where nick=:nick");
         this->q.bindValue(":nick", nickname);
         this->q.exec();
         return this->q.boundValues();
+    }
+    bool addFriend(const char * nickname, const char * pubkey){
+        if (getIDFromNickname(nickname) != -1 ) return false;
+        this->q.prepare("Insert into Friends(nickname, pubkey) values(:nickname, :pubkey);");
+        this->q.bindValue(":nickname",nickname);
+        this->q.bindValue(":pubkey",pubkey);
+        return true;
     }
 
     void install(void);

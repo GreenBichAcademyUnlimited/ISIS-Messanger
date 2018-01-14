@@ -11,6 +11,13 @@ private:
 
 public:
     dbmessage();
+    QMap<QString, QVariant> getMessages(const char * nickname){
+        this->q.prepare("Select * from Messages where from=:nick");
+        this->q.bindValue(":nick", nickname);
+        this->q.exec();
+        return this->q.boundValues();
+    }
+
     void addMessage(const char * message, int to, int from=0); // zero = self
 
 };

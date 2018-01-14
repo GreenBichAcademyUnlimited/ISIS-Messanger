@@ -42,6 +42,16 @@ protected:
     void virtual query( void ) = 0;
     void virtual install(void)=0;
 public:
+    int getIDFromNickname(const char * nickname){
+        this->q.prepare("Select id from Friends where nick=:nick");
+        this->q.bindValue(":nick", nickname);
+        this->q.exec();
+        QList<QVariant> tmp = q.boundValues().values();
+        if(tmp.size() > 0){
+            return tmp.at(0).toInt();
+        }
+        return -1;
+    }
 
     QSqlQuery q;
     ~dbAbstract();
