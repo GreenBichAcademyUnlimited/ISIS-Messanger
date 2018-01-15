@@ -9,6 +9,33 @@
 #include<QDir>
 //#include<QDebug>
 
+void MainWindow::initFriendList(void){
+    FriendList->move(0,30);
+    FriendList->resize(120,this->height());
+    FriendList->setStyleSheet("QListWidget {color:blue;background-color:snow;}");
+    new QListWidgetItem(tr("Self"), FriendList);
+
+    mhLayout->addWidget(FriendList);
+
+
+
+
+}
+
+void MainWindow::initMessageBox(void){
+    MessageWindow = new QTextEdit(this);
+    MessageWindow->setReadOnly(true);
+    MessageWindow->setText("Check                                                              "
+                           "         test 123123");
+    MessageWindow->setWordWrapMode( QTextOption::WordWrap		);
+    MessageWindow->setAlignment(    Qt::AlignTop | Qt::AlignLeft);
+    MessageWindow->setGeometry(125,30,this->width()-330,this->height()-100);
+    MessageWindow->setStyleSheet("QTextEdit {background-color:snow;}");
+
+    mhLayout->addWidget(MessageWindow);
+
+}
+
 void MainWindow::initMenu(void){
     Friends = new QMenu(this);
     Advance = new QMenu(this);
@@ -66,6 +93,12 @@ void MainWindow::initMenu(void){
      connect(Advance_About,SIGNAL(triggered(bool)),advBox,SLOT(exec()));
 //Settings
 
+     FriendList = new QListWidget(this);
+     // FriendList->addItem();
+     // ...
+     mhLayout = new QHBoxLayout(this);
+
+     this->setLayout(mhLayout);
 
 
 }
@@ -103,18 +136,23 @@ void MainWindow::setActiv(){
 }
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
+    QMainWindow(parent),
+    myUi(new Ui::MainWindow)
 
 {
+    myUi->setupUi(this);
     QRect ScreenRect
          = QApplication::desktop()->screenGeometry();
 
     this->initMenu();
     this->setGeometry(ScreenRect.width()/4,ScreenRect.height()/4,500,500);
-
+    this->initFriendList();
+    this->initMessageBox();
+    this->setStyleSheet("QWidget { background-image: url('./background.jpeg'); }");//background-size:cover;background-position:center;
 }
 
 MainWindow::~MainWindow()
 {
     //delete [] config;
+    delete [] myUi;
 }

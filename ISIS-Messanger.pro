@@ -34,6 +34,7 @@ HEADERS  += mainwindow.h \
     aes.h \
     dbabstract.h
 
-FORMS    +=
+FORMS    += \
+    mainwindow.ui
 
 LIBS += -lcrypto -lssl
