@@ -32,8 +32,8 @@ QList<QString> * dbmain::getMessages(const char * nickname){
 
     QSqlQuery msgQuery(this->db);
     msgQuery.prepare("SELECT message, from_me FROM Messages WHERE chat_id=:id ;");
-
-    msgQuery.bindValue(":id", getIDFromNickname(nickname));
+    int id = getIDFromNickname(nickname);
+    msgQuery.bindValue(":id", id);
     msgQuery.exec();
     qDebug() <<  msgQuery.lastError();
 
@@ -53,9 +53,10 @@ QList<QString> * dbmain::getMessages(const char * nickname){
         qDebug() <<  msgQuery.value(0).toString() <<  msgQuery.value(1).toString();
 
         if( msgQuery.value(1).toBool())
-            returns->append( QString("I: ") +  msgQuery.value(0).toString() + "\n");
+            returns->append( QString("I: ") + ( id == 1 ? msgQuery.value(0).toString() : (char*)aes.decrypt (msgQuery.value(0).toString().toStdString().c_str() ) )  + "\n");
         else
-            returns->append(QString(nickname) + QString(": ") +  msgQuery.value(0).toString() + "\n");
+            returns->append(QString(nickname) + QString(": ") +  ( id == 1 ? msgQuery.value(0).toString() : (char*)aes.decrypt (msgQuery.value(0).toString().toStdString().c_str() ) ) + "\n");
+
     }
 
 
