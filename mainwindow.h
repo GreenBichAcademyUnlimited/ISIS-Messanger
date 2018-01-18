@@ -34,11 +34,12 @@ private:
     * Advance_Exit, * Advance_About;
 
     QSettings * config;
+    /*
     QVBoxLayout * mvLayout;
     QHBoxLayout * mhLayout;
     QListWidget * FriendList;
     QTextEdit * MessageWindow;
-
+*/
 
 
 

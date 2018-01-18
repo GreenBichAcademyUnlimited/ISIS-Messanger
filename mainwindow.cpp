@@ -10,19 +10,21 @@
 //#include<QDebug>
 
 void MainWindow::initFriendList(void){
+  /*
     FriendList->move(0,30);
     FriendList->resize(120,this->height());
     FriendList->setStyleSheet("QListWidget {color:blue;background-color:snow;}");
     new QListWidgetItem(tr("Self"), FriendList);
 
     mhLayout->addWidget(FriendList);
-
+*/
 
 
 
 }
 
 void MainWindow::initMessageBox(void){
+    /*
     MessageWindow = new QTextEdit(this);
     MessageWindow->setReadOnly(true);
     MessageWindow->setText("Check                                                              "
@@ -33,7 +35,7 @@ void MainWindow::initMessageBox(void){
     MessageWindow->setStyleSheet("QTextEdit {background-color:snow;}");
 
     mhLayout->addWidget(MessageWindow);
-
+*/
 }
 
 void MainWindow::initMenu(void){
@@ -66,11 +68,11 @@ void MainWindow::initMenu(void){
     Advance_About = new QAction(this);
 
     Advance_Exit->setShortcut(QKeySequence(tr("Ctrl+F4")));
-    Advance_Exit->setStatusTip( tr("&Exit from program") );
+    Advance_Exit->setStatusTip( tr("Exit from program") );
     Advance_Exit->setText( tr("&Exit") );
 
     Advance_About->setShortcut(QKeySequence(tr("F1")));
-    Advance_About->setStatusTip(tr("&About of program"));
+    Advance_About->setStatusTip(tr("About of program"));
     Advance_About->setText(tr("&About"));
 
 
@@ -92,14 +94,14 @@ void MainWindow::initMenu(void){
      advBox->setText(tr("ISIS-Mess(e)anger 2018-?"));
      connect(Advance_About,SIGNAL(triggered(bool)),advBox,SLOT(exec()));
 //Settings
-
+/*
      FriendList = new QListWidget(this);
      // FriendList->addItem();
      // ...
      mhLayout = new QHBoxLayout(this);
 
      this->setLayout(mhLayout);
-
+*/
 
 }
 
@@ -130,6 +132,7 @@ void MainWindow::setActiv(){
              error.setText(tr("Error with SAM, try new"));
              error.exec();
          }
+
     }
     //qDebug() << "PASS OF GUY=" << PassOfGuy;
 
@@ -141,6 +144,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
 {
     myUi->setupUi(this);
+    myUi->centralwidget->setMinimumSize(551,461);
+    this->setWindowTitle("ISIS-Messenger");
+
     QRect ScreenRect
          = QApplication::desktop()->screenGeometry();
 
@@ -149,6 +155,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->initFriendList();
     this->initMessageBox();
     this->setStyleSheet("QWidget { background-image: url('./background.jpeg'); }");//background-size:cover;background-position:center;
+
 }
 
 MainWindow::~MainWindow()
