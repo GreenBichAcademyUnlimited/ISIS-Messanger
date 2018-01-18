@@ -138,6 +138,10 @@ void MainWindow::setActiv(){
 
 }
 
+void MainWindow::resizeEvent(QResizeEvent * e){
+    QMainWindow::resizeEvent(e);
+}
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     myUi(new Ui::MainWindow)
@@ -145,6 +149,8 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     myUi->setupUi(this);
     myUi->centralwidget->setMinimumSize(551,461);
+    myUi->centralwidget->setLayout(this->myUi->horizontalLayout);
+
     this->setWindowTitle("ISIS-Messenger");
 
     QRect ScreenRect

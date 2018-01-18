@@ -10,6 +10,7 @@
 #include<QVBoxLayout>
 #include<QListWidget>
 #include<QTextEdit>
+#include<QResizeEvent>
 
 namespace Ui{
     class MainWindow;
@@ -24,6 +25,7 @@ private:
     void initMenu(void);
     void initFriendList(void);
     void initMessageBox(void);
+    void resizeEvent(QResizeEvent *event);
 private:
     Ui::MainWindow * myUi;
 
