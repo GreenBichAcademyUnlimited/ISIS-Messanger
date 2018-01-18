@@ -88,10 +88,21 @@ void sam::generateDestination(void){
 
 
 bool sam::getStatus(int socket){
-    QString data = MyOwnTCPSocket::Read(socket);
+   QString data = MyOwnTCPSocket::Read(socket);
+   qDebug() << "SAM::GetStatus:" << data;
+   if(data.split(" ").size() < 3) return false;
    if ( data.split(" ")[2] != "RESULT=OK" ) return false;
+   c_incoming++;
    return true;
 
+}
+
+void sam::WhileSession(void){
+    QString data;
+    do{
+     data= MyOwnTCPSocket::Read(this->m_sock);
+     qDebug() << "SAM::WhileSession" << data;
+    }while(data.size() > 2);
 }
 
 bool sam::accept(const char * nickname){
@@ -106,7 +117,11 @@ bool sam::accept(const char * nickname){
         }
     }
     incoming[c_incoming] = MyOwnTCPSocket::Connect( m_host, m_port );
-    if(!this->isSam(incoming[c_incoming])) return false;
+    qDebug() << "Accepting SAM" << m_host << m_port;
+
+    if( incoming[c_incoming] == -1) return false;
+
+    if( !this->isSam(incoming[c_incoming], false) ) return false;
     MyOwnTCPSocket::Write(incoming[c_incoming], QString("STREAM ACCEPT ID=%1").arg(nickname).toStdString().c_str() );
     return this->getStatus(incoming[c_incoming]);
 }
@@ -124,6 +139,7 @@ bool sam::connect(const char * destination,const char * nickname){
         }
     }
     outcoming[c_outcoming] = MyOwnTCPSocket::Connect( m_host, m_port );
+    if( outcoming[c_outcoming] == -1) return false;
     MyOwnTCPSocket::Write(outcoming[c_outcoming], QString("STREAM CONNECT ID=%1 DESTINATION=%2").arg(nickname, destination).toStdString().c_str() );
     return this->getStatus(outcoming[c_outcoming]);
 }
@@ -145,15 +161,25 @@ void sam :: CreateSession(const char * nickname, SAMstyle s ){
     if(!this->m_sock) this->connect(this->m_host,this->m_port);
     if(!this->error){
         if(!this->privkey) this->generateDestination();
+        QString tdata;
         if(s == stream){
-            QString data = QString("SESSION CREATE STYLE=%1 ID=%2 DESTINATION=%3")
+            tdata = QString("SESSION CREATE STYLE=%1 ID=%2 DESTINATION=%3")
                     .arg("STREAM",nickname,this->privkey);
         }else{
-            QString data = QString("SESSION CREATE STYLE=%1 ID=%2 DESTINATION=%3")
+            tdata = QString("SESSION CREATE STYLE=%1 ID=%2 DESTINATION=%3")
                     .arg(s == datagram ? "DATAGRAM" : "RAW",nickname,this->privkey);
         }
+        MyOwnTCPSocket::Write(this->m_sock, tdata.toStdString().c_str() );
         QString data = MyOwnTCPSocket::Read(this->m_sock);
-        if ( data.split(" ")[2] != "RESULT=OK" && data.split(" ")[2] != "RESULT=DUPLICATED_ID"  ) this->error=true;
+        qDebug() << "SAM::CreateSession"<< data;
+
+        if(data.split(" ").size() < 3){
+            qDebug() << "SAM::PRIVKEY > " << this->privkey;
+            qDebug() << "SAM::PUBKEY > " << this->pubkey;
+            this->error=true;
+        }
+        else
+            if ( data.split(" ")[2] != "RESULT=OK" && data.split(" ")[2] != "RESULT=DUPLICATED_ID"  ) this->error=true;
     }
 }
 

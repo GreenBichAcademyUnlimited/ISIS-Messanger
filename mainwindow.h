@@ -30,10 +30,12 @@ private:
     void resizeEvent(QResizeEvent *event);
 
     //
-    void FriendAccepting(void);
-    void MessageAccepting(void);
+    void ClientAccepting(void);
+    void ClientThread(int socket);
+    void SessionThread(void);
+
 private:
-    std::thread friend_t, message_t;
+    std::thread client_accepting_t, session_t;
 
     std::string pathF;
 

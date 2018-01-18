@@ -9,6 +9,7 @@
 #include<QDir>
 #include<QFileDialog>
 #include<QDebug>
+#include"sockets.hpp"
 
 void MainWindow::changeChat(QListWidgetItem * item){
     qDebug() << "Open chat with" << item->text();
@@ -23,29 +24,34 @@ void MainWindow::changeChat(QListWidgetItem * item){
 
 
 
-void MainWindow::FriendAccepting(void){
+void MainWindow::ClientThread(int socket){
+    MyOwnTCPSocket::Write(socket, "hello");
+}
 
+
+void MainWindow::ClientAccepting(void){
+/*
     while(1){
-    //sam Client(config->value("SAM/host").toString().toStdString().c_str(),\
-               atoi( config->value("SAM/port").toString().toStdString().c_str()));\
+    sam Client(config->value("SAM/host").toString().toStdString().c_str(),
+               atoi( config->value("SAM/port").toString().toStdString().c_str()));
+    Client.loadKeys(config->value("SAM/Pubkey").toString().toStdString().c_str(),config->value("SAM/Privkey").toString().toStdString().c_str());
+
+    if( !Client.accept() ) continue;
+    qDebug() << "Accepting" << Client.getIncoming();
+    int S = Client[Client.getIncoming()-1];
+
+    qDebug() << MyOwnTCPSocket::Read(S) << " Connected";
+    std::thread(&MainWindow::ClientThread,this,S);
+
     if(Client.getError()) continue;
 
     }
-
+*/
 
 
 }
 
-void MainWindow::MessageAccepting(void){
 
-    while(1){
-  //  sam Client(config->value("SAM/host").toString().toStdString().c_str(),\
-               atoi( config->value("SAM/port").toString().toStdString().c_str()));\
-    if(Client.getError()) continue;
-
-    }
-
-}
 
 /*
 static void * FriendAccepting(void * self){
@@ -90,7 +96,7 @@ void MainWindow::initFriendList(void){
        this->myUi->listWidget->addItem(db.q.value(index).toString());
     }
     connect(myUi->listWidget,
-            SIGNAL(itemChanged(QListWidgetItem*)),
+            SIGNAL(itemClicked(QListWidgetItem*)),
                    this,
                    SLOT(changeChat(QListWidgetItem*)) );
 
@@ -216,6 +222,19 @@ void MainWindow::initMenu(void){
 
 }
 
+void MainWindow::SessionThread(){
+    while(1){
+        sam Client(config->value("SAM/host").toString().toStdString().c_str(),
+                   atoi( config->value("SAM/port").toString().toStdString().c_str()));
+        Client.loadKeys(config->value("SAM/Pubkey").toString().toStdString().c_str(),config->value("SAM/Privkey").toString().toStdString().c_str());
+        Client.CreateSession();
+        if( !Client.getError() )continue;
+        //while(1);
+        Client.WhileSession();
+    }
+
+}
+
 void MainWindow::setActiv(){
     this->show();
     QFileInfo finfo(QCoreApplication::applicationFilePath());
@@ -223,6 +242,7 @@ void MainWindow::setActiv(){
 
     config = new QSettings((pathF + "/" + CONFIG_PATH + "/config.ini").c_str(), QSettings::NativeFormat);
     if(config->value("SAM/Privkey",0) == 0){
+        qDebug() << "SAM/Privkey not exist";
         if(config->value("SAM/host",0) == 0 || config->value("SAM/port",0) == 0){
             QMessageBox error;
             error.setText(tr("Please create new account...(config)"));
@@ -231,19 +251,22 @@ void MainWindow::setActiv(){
         }
          while(1){
              sam Client(config->value("SAM/host").toString().toStdString().c_str(),
-                        atoi( config->value("SAM/port").toString().toStdString().c_str()));
+                        atoi( config->value("SAM/port").toString().toStdString().c_str()));             
              Client.generateDestination();
+             Client.CreateSession();
 
              if(!Client.getError()){
-                 config->setValue("SAM/Privkey",Client.getPrivkey());
-                 config->setValue("SAM/Pubkey",Client.getPubkey());
-                 break;
+                 config->setValue("SAM/Privkey", Client.getPrivkey());
+                 config->setValue("SAM/Pubkey", Client.getPubkey());
+                 if(config->value("SAM/Privkey",0) != 0) break;
              }
+
              QMessageBox error;
              error.setText(tr("Error with SAM, try new"));
              error.exec();
          }
-
+         delete  config;
+         config = new QSettings((pathF + "/" + CONFIG_PATH + "/config.ini").c_str(), QSettings::NativeFormat);
     }
     //qDebug() << "PASS OF GUY=" << PassOfGuy;
     this->initFriendList();
@@ -252,9 +275,10 @@ void MainWindow::setActiv(){
     db = dbmain();
    // pthread_create(&message_t, 0, &MessageAccepting, this);
    // pthread_create(&friend_t, 0, &FriendAccepting, this);
-    friend_t = std::thread(&MainWindow::FriendAccepting, this);
-    message_t = std::thread(&MainWindow::MessageAccepting, this);
 
+
+    client_accepting_t = std::thread(&MainWindow::ClientAccepting, this);
+    session_t = std::thread(&MainWindow::SessionThread, this);
 
 }
 

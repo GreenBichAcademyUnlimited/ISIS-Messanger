@@ -26,27 +26,40 @@ protected:
 protected:
     bool getStatus(int socket);
 public:
-   bool accept(const char * nickname="Isis messa(e)nger");
-   bool connect(const char * destination,const char * nickname="Isis messa(e)nger");
+   bool accept(const char * nickname="Isis");
+   bool connect(const char * destination,const char * nickname="Isis");
 
 public: // sesions
     void DeleteSession(const char * nickname);
-    void CreateSession(const char * nickname="Isis messa(e)nger", SAMstyle s = stream );
+    void CreateSession(const char * nickname="Isis", SAMstyle s = stream );
+    void WhileSession(void);
 
 public: // keys
     void loadKeys(const char * pubkey, const char * privkey);
     void generateDestination(void);
     char * getPubkey(void);
     char * getPrivkey(void);
+//last connectings
+public:
+    int getIncoming(void){
+        return c_incoming;
+    }
+    int getOutcoming(void){
+        return c_outcoming;
+    }
 
 public: // errors/is sam
     bool isSam(const char * host, int port);
     bool isSam(int sock, bool closeConnect=true);
     bool getError(void);
 
+
     int& operator[] (int x){
         if(c_incoming > x && incoming)
             return incoming[x];
+        this->error=true;
+        throw "Overflow of SAM::operator[]";
+        return incoming[0];
     }
 
 public: // construct/destruct
