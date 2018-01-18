@@ -13,7 +13,7 @@
 #define DB_ABSTRACT_CPP(classname)\
     \
 template < class Arg, class ... Args> void db##classname ::query(Arg arg, Args ... args){\
-    q.exec(arg);\
+    this->q.exec(arg);\
     qDebug() << "query::" << arg;\
     qDebug() << q.lastError().text();\
     this->query(args...);\
@@ -42,13 +42,19 @@ protected:
     void virtual query( void ) = 0;
     void virtual install(void)=0;
 public:
+    void reopen(void){
+        this->q = QSqlQuery(this->db);
+    }
+
     int getIDFromNickname(const char * nickname){
         this->q.prepare("Select id from Friends where nick=:nick");
         this->q.bindValue(":nick", nickname);
         this->q.exec();
-        QList<QVariant> tmp = q.boundValues().values();
-        if(tmp.size() > 0){
-            return tmp.at(0).toInt();
+        if( q.next() ){
+            qDebug() << "ID FROM " << nickname << ":" << q.value(0).toInt();
+            qDebug() << q.lastError();
+
+            return q.value(0).toInt();
         }
         return -1;
     }

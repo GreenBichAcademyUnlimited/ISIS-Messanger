@@ -29,6 +29,8 @@
 
 
 #include"sockets.hpp"
+#include"dbmain.hpp"
+//#include"messagesdb.h"
 
 #define SAM_DEFAULT_HOST "127.0.0.1"
 #define SAM_DEFAULT_PORT 7656
@@ -114,6 +116,12 @@ void StartSettings::Register(void){
         QByteArray passBytes(password->text().toStdString().c_str());
         passBytes.append(username->text().toStdString().c_str()); // salt
         settings.setValue("User/Password",QCryptographicHash::hash(passBytes, QCryptographicHash::Sha1		));
+
+
+        dbmain db(true);
+        while(!db.getInstalled());
+
+        //db.install();
         emit Registered(true);
 
     }

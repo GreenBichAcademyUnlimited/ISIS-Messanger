@@ -10,6 +10,17 @@
 #include<QFileDialog>
 #include<QDebug>
 
+void MainWindow::changeChat(QListWidgetItem * item){
+    qDebug() << "Open chat with" << item->text();
+    QList<QString> * msgs = db.getMessages(item->text().toStdString().c_str());//dbmain::getMessages
+    QList<QString>::iterator iterator;
+    this->myUi->textBrowser->setText("");
+    for(iterator = msgs->begin();iterator!=msgs->end();iterator++){
+        this->myUi->textBrowser->setText(myUi->textBrowser->toPlainText() + *iterator);
+    }
+
+}
+
 void MainWindow::initFriendList(void){
   /*
     FriendList->move(0,30);
@@ -19,8 +30,21 @@ void MainWindow::initFriendList(void){
 
     mhLayout->addWidget(FriendList);
 */
+    db.query("SELECT * FROM Friends;");
+    int index;
 
+    while(db.q.next()){
+       index = db.q.record().indexOf("nick");
+       this->myUi->listWidget->addItem(db.q.value(index).toString());
+    }
+    connect(myUi->listWidget,
+            SIGNAL(itemChanged(QListWidgetItem*)),
+                   this,
+                   SLOT(changeChat(QListWidgetItem*)) );
 
+    QListWidgetItem tmp;
+    tmp.setText("Self");
+    this->changeChat(&tmp);
 
 }
 
@@ -170,12 +194,20 @@ void MainWindow::setActiv(){
 
     }
     //qDebug() << "PASS OF GUY=" << PassOfGuy;
+    this->initFriendList();
+    this->initMessageBox();
+    this->setStyleSheet("QWidget { background-image: url('./background.jpeg'); }");//background-size:cover;background-position:center;
+    db = dbmain();
+
 
 }
 
 void MainWindow::resizeEvent(QResizeEvent * e){
     QMainWindow::resizeEvent(e);
 }
+
+
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -193,10 +225,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->initMenu();
     this->setGeometry(ScreenRect.width()/4,ScreenRect.height()/4,500,500);
-    this->initFriendList();
-    this->initMessageBox();
-    this->setStyleSheet("QWidget { background-image: url('./background.jpeg'); }");//background-size:cover;background-position:center;
-
 }
 
 MainWindow::~MainWindow()

@@ -18,10 +18,10 @@ SOURCES += main.cpp\
     sockets.cpp \
     enterwidget.cpp \
     sam.cpp \
-    friendsdb.cpp \
-    messagesdb.cpp \
     aes.cpp \
-    dbabstract.cpp
+    dbabstract.cpp \
+    dbmain.cpp \
+    friendadd.cpp
 
 HEADERS  += mainwindow.h \
     startsettings.h \
@@ -29,12 +29,13 @@ HEADERS  += mainwindow.h \
     enterwidget.h \
     config.h \
     sam.h \
-    friendsdb.h \
-    messagesdb.h \
     aes.h \
-    dbabstract.h
+    dbabstract.h \
+    dbmain.hpp \
+    friendadd.h
 
 FORMS    += \
-    mainwindow.ui
+    mainwindow.ui \
+    friendadd.ui
 
-LIBS += -lcrypto -lssl
+LIBS += -lcrypto -lssl -lpthread

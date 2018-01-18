@@ -6,10 +6,10 @@ void dbAbstract::getDB(const char * dbname, const char * driver){
     db.setDatabaseName(dbname);
    if (!db.open()) {
        error=true;
-       qDebug() << db.lastError().text();
+       qCritical() << db.lastError().text();
    }
    else{
-       q = QSqlQuery(this->db);
+       this->q = QSqlQuery(this->db);
        qDebug() << "database was open";
    }
 }

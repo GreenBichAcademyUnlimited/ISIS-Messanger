@@ -11,6 +11,7 @@
 #include<QListWidget>
 #include<QTextEdit>
 #include<QResizeEvent>
+#include"dbmain.hpp"
 
 namespace Ui{
     class MainWindow;
@@ -38,6 +39,8 @@ private:
     * Advance_Exit, * Advance_About;
 
     QSettings * config;
+
+    dbmain db;
     /*
     QVBoxLayout * mvLayout;
     QHBoxLayout * mhLayout;
@@ -56,8 +59,8 @@ public slots:
     void setActiv(void);
 private slots:
     void setBackground(void);
+    void changeChat(QListWidgetItem*);
 
-private:
 };
 
 #endif // MAINWINDOW_H
