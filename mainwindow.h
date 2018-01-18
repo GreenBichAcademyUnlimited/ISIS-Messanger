@@ -27,12 +27,14 @@ private:
     void initMessageBox(void);
     void resizeEvent(QResizeEvent *event);
 private:
+    std::string pathF;
+
     Ui::MainWindow * myUi;
 
     QMenu * Friends, * Settings, * Advance;
 
     QAction * Friends_add,
-    * Settings_Network,
+    * Settings_Network, * Settings_background,
     * Advance_Exit, * Advance_About;
 
     QSettings * config;
@@ -52,6 +54,8 @@ public:
 
 public slots:
     void setActiv(void);
+private slots:
+    void setBackground(void);
 
 private:
 };

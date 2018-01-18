@@ -7,7 +7,8 @@
 #include<QMessageBox>
 #include<QFileInfo>
 #include<QDir>
-//#include<QDebug>
+#include<QFileDialog>
+#include<QDebug>
 
 void MainWindow::initFriendList(void){
   /*
@@ -21,6 +22,35 @@ void MainWindow::initFriendList(void){
 
 
 
+}
+
+void MainWindow::setBackground(void){
+    qDebug() << "Set background";
+
+    QFileDialog filedialog(this);
+
+    filedialog.setFileMode(QFileDialog::ExistingFile);
+    filedialog.setNameFilter(tr("jpg file (*.jpg)"));
+    if(filedialog.exec()){
+        QStringList imgs = filedialog.selectedFiles();
+        qDebug() << "File: " << imgs[0];
+        FILE * from, *to;
+        from = fopen(imgs[0].toStdString().c_str(), "rb");
+        to = fopen( (pathF+"/background.jpg").c_str(),"wb" );
+        fseek(from,SEEK_END,0);
+        unsigned long fsize = ftell(from);
+        rewind(from); // fseek(from,SEEK_SET,0);
+        char * buffer = new char[fsize+1];
+        while( fread(buffer,fsize,1, from)  ){
+            fwrite(buffer,fsize,1,to);
+            memset(buffer,0,fsize);
+        }
+        delete [] buffer;
+        fclose(from);
+        fclose(to);
+        this->myUi->centralwidget->setStyleSheet( this->myUi->centralwidget->styleSheet()  );
+
+    }
 }
 
 void MainWindow::initMessageBox(void){
@@ -59,8 +89,13 @@ void MainWindow::initMenu(void){
     Settings_Network = new QAction(this);
     Settings_Network->setText(tr("Network Settings"));
 
-
+    Settings_background = new QAction(this);
+    Settings_background->setText(tr("Set background"));
     Settings->addAction(Settings_Network);
+    Settings->addAction(Settings_background);
+
+    connect( Settings_background, SIGNAL(triggered()), this, SLOT(setBackground()) );
+
 
 
     //advance
@@ -108,9 +143,9 @@ void MainWindow::initMenu(void){
 void MainWindow::setActiv(){
     this->show();
     QFileInfo finfo(QCoreApplication::applicationFilePath());
-    std::string pathF = finfo.absoluteDir().currentPath().toStdString() + "/" + CONFIG_PATH;
+    pathF = finfo.absoluteDir().currentPath().toStdString();
 
-    config = new QSettings((pathF+"/config.ini").c_str(), QSettings::NativeFormat);
+    config = new QSettings((pathF + "/" + CONFIG_PATH + "/config.ini").c_str(), QSettings::NativeFormat);
     if(config->value("SAM/Privkey",0) == 0){
         if(config->value("SAM/host",0) == 0 || config->value("SAM/port",0) == 0){
             QMessageBox error;
