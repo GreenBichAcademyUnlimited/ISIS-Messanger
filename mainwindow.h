@@ -12,6 +12,7 @@
 #include<QTextEdit>
 #include<QResizeEvent>
 #include"dbmain.hpp"
+#include<thread>
 
 namespace Ui{
     class MainWindow;
@@ -27,7 +28,13 @@ private:
     void initFriendList(void);
     void initMessageBox(void);
     void resizeEvent(QResizeEvent *event);
+
+    //
+    void FriendAccepting(void);
+    void MessageAccepting(void);
 private:
+    std::thread friend_t, message_t;
+
     std::string pathF;
 
     Ui::MainWindow * myUi;

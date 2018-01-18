@@ -21,6 +21,58 @@ void MainWindow::changeChat(QListWidgetItem * item){
 
 }
 
+
+
+void MainWindow::FriendAccepting(void){
+
+    while(1){
+    //sam Client(config->value("SAM/host").toString().toStdString().c_str(),\
+               atoi( config->value("SAM/port").toString().toStdString().c_str()));\
+    if(Client.getError()) continue;
+
+    }
+
+
+
+}
+
+void MainWindow::MessageAccepting(void){
+
+    while(1){
+  //  sam Client(config->value("SAM/host").toString().toStdString().c_str(),\
+               atoi( config->value("SAM/port").toString().toStdString().c_str()));\
+    if(Client.getError()) continue;
+
+    }
+
+}
+
+/*
+static void * FriendAccepting(void * self){
+    MainWindow * w = reinterpret_cast<MainWindow*>(self);
+    while(1){
+    sam Client(w->config->value("SAM/host").toString().toStdString().c_str(),
+               atoi( w->config->value("SAM/port").toString().toStdString().c_str()));
+    if(Client.getError()) continue;
+
+    }
+    return self;
+}
+
+static void * MessageAccepting(void * self){
+    MainWindow * w = reinterpret_cast<MainWindow*>(self);
+    while(1){
+    sam Client(w->config->value("SAM/host").toString().toStdString().c_str(),
+               atoi( w->config->value("SAM/port").toString().toStdString().c_str()));
+    if(Client.getError()) continue;
+
+
+    }
+    return self;
+}
+*/
+
+
 void MainWindow::initFriendList(void){
   /*
     FriendList->move(0,30);
@@ -198,6 +250,10 @@ void MainWindow::setActiv(){
     this->initMessageBox();
     this->setStyleSheet("QWidget { background-image: url('./background.jpeg'); }");//background-size:cover;background-position:center;
     db = dbmain();
+   // pthread_create(&message_t, 0, &MessageAccepting, this);
+   // pthread_create(&friend_t, 0, &FriendAccepting, this);
+    friend_t = std::thread(&MainWindow::FriendAccepting, this);
+    message_t = std::thread(&MainWindow::MessageAccepting, this);
 
 
 }
